@@ -50,41 +50,15 @@ const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'N
 
 const bandsCopy = [...bands]
 
-const sorted = bandsCopy.sort((a, b) => {
-  let trimmedb
-  let trimmeda 
+const regex = new RegExp(/ˆ(a |the |an )/i)
 
-  if (a.startsWith('An ')) {
-    trimmeda = a.replace('An ', '')
-  } else if (a.startsWith('A ')) {
-    trimmeda = a.replace('A ', '')
-  } else if (a.startsWith('The ')) {
-    trimmeda = a.replace('The ', '')
-  } else {
-    trimmeda = a
-  }
+const sorted = bandsCopy.sort((a, b) => strip(a) < strip(b) ? -1 : 1)
 
-  if (b.startsWith('An ')) {
-    trimmedb = b.replace('An ', '')
-  } else if (b.startsWith('A ')) {
-    trimmedb = b.replace('A ', '')
-  } else if (b.startsWith('The ')) {
-    trimmedb = b.replace('The ', '')
-  } else {
-    trimmedb = b
-  }
+function strip (bandName) {
+  return bandName.replace(regex, '').trim()
+}
 
-  return trimmedb < trimmeda ? 1 : -1
-})
-
-let bandList = document.querySelector("#bands")
-let bandListHTML = []
-sorted.forEach((band) => {
-  bandListHTML.push(`<li>${band}</li>`)
-  console.log(bandListHTML)
-})
-
-bandList.innerHTML = bandListHTML.join("")
+document.querySelector("#bands").innerHTML = sorted.map((band) => `<li>${band}</li>`).join("")
 
 </script>
 
